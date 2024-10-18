@@ -29,7 +29,7 @@ jobs:
 
       - name: Build binaries
         run: |
-          GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} go build -o QuarkDownloader-${{ matrix.goos }}-${{ matrix.goarch }}  # 编译项目
+          GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} go build -o QuarkDownloader-${{ matrix.goos }}-${{ matrix.goarch }} /cmd # 编译项目
         env:
           CGO_ENABLED: 0  # 确保生成静态链接的可执行文件
 
