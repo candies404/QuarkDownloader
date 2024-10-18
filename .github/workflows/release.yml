@@ -1,0 +1,62 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'  # 监听版本标签，如 v1.0.0
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        goos: [linux, windows, darwin]      # 目标平台：Linux, Windows, macOS
+        goarch: [amd64, arm64]              # 目标架构：amd64, arm64
+        # 你可以根据需要在此处增加其他操作系统和架构组合
+        exclude:
+          - goos: windows
+            goarch: arm64  # Windows 不支持 arm64
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3  # 检出代码
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.20  # 使用的 Go 版本
+
+      - name: Build binaries
+        run: |
+          GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} go build -o QuarkDownloader-${{ matrix.goos }}-${{ matrix.goarch }}  # 编译项目
+        env:
+          CGO_ENABLED: 0  # 确保生成静态链接的可执行文件
+
+      - name: Upload binaries
+        uses: actions/upload-artifact@v3
+        with:
+          name: QuarkDownloader-${{ matrix.goos }}-${{ matrix.goarch }}
+          path: QuarkDownloader-${{ matrix.goos }}-${{ matrix.goarch }}  # 上传生成的二进制文件
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download binaries
+        uses: actions/download-artifact@v3
+        with:
+          name: QuarkDownloader-${{ matrix.goos }}-${{ matrix.goarch }}
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            QuarkDownloader-linux-amd64
+            QuarkDownloader-linux-arm64
+            QuarkDownloader-windows-amd64.exe
+            QuarkDownloader-darwin-amd64
+            QuarkDownloader-darwin-arm64
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # 使用 GitHub 的令牌发布 Release
