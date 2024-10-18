@@ -13,7 +13,6 @@ jobs:
       matrix:
         goos: [linux, windows, darwin]      # 目标平台：Linux, Windows, macOS
         goarch: [amd64, arm64]              # 目标架构：amd64, arm64
-        # 你可以根据需要在此处增加其他操作系统和架构组合
         exclude:
           - goos: windows
             goarch: arm64  # Windows 不支持 arm64
@@ -29,7 +28,11 @@ jobs:
 
       - name: Build binaries
         run: |
-          GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} go build -o QuarkDownloader-${{ matrix.goos }}-${{ matrix.goarch }} ./cmd # 编译项目
+          output_name=QuarkDownloader-${{ matrix.goos }}-${{ matrix.goarch }}
+          if [[ "${{ matrix.goos }}" == "windows" ]]; then
+            output_name="${output_name}.exe"
+          fi
+          GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} go build -o $output_name ./cmd # 编译项目
         env:
           CGO_ENABLED: 0  # 确保生成静态链接的可执行文件
 
@@ -37,17 +40,37 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: QuarkDownloader-${{ matrix.goos }}-${{ matrix.goarch }}
-          path: QuarkDownloader-${{ matrix.goos }}-${{ matrix.goarch }}  # 上传生成的二进制文件
+          path: QuarkDownloader-${{ matrix.goos }}-${{ matrix.goarch }}*  # 上传生成的二进制文件，考虑 Windows 的 .exe 文件
 
   release:
     needs: build
     runs-on: ubuntu-latest
 
     steps:
-      - name: Download binaries
+      - name: Download Linux amd64
         uses: actions/download-artifact@v3
         with:
-          name: QuarkDownloader-${{ matrix.goos }}-${{ matrix.goarch }}
+          name: QuarkDownloader-linux-amd64
+
+      - name: Download Linux arm64
+        uses: actions/download-artifact@v3
+        with:
+          name: QuarkDownloader-linux-arm64
+
+      - name: Download Windows amd64
+        uses: actions/download-artifact@v3
+        with:
+          name: QuarkDownloader-windows-amd64
+
+      - name: Download macOS amd64
+        uses: actions/download-artifact@v3
+        with:
+          name: QuarkDownloader-darwin-amd64
+
+      - name: Download macOS arm64
+        uses: actions/download-artifact@v3
+        with:
+          name: QuarkDownloader-darwin-arm64
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
