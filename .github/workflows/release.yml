@@ -16,6 +16,12 @@ jobs:
         exclude:
           - goos: windows
             goarch: arm64  # Windows 不支持 arm64
+        include:
+          # 增加对 linux armv6 和 armv7 的支持
+          - goos: linux
+            goarch: armv6
+          - goos: linux
+            goarch: armv7
 
     steps:
       - name: Check out code
