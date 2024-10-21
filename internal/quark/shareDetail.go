@@ -8,6 +8,7 @@ import (
 	"log"
 	"math/rand"
 	"net/http"
+	"os"
 	"path"
 	"regexp"
 	"strconv"
@@ -20,15 +21,17 @@ type SharePageDetailResponse struct {
 	Code    int    `json:"code"`
 	Message string `json:"message"`
 	Data    struct {
-		List []struct {
-			Fid           string `json:"fid"`
-			ShareFidToken string `json:"share_fid_token"`
-			FileName      string `json:"file_name"`
-			Size          int    `json:"size"`
-			Dir           bool   `json:"dir"`
-			UpdatedAt     int64  `json:"updated_at"`
-		} `json:"list"`
+		List []FileInfo `json:"list"`
 	} `json:"data"`
+}
+
+type FileInfo struct {
+	Fid           string `json:"fid"`
+	ShareFidToken string `json:"share_fid_token"`
+	FileName      string `json:"file_name"`
+	Size          int    `json:"size"`
+	Dir           bool   `json:"dir"`
+	UpdatedAt     int64  `json:"updated_at"`
 }
 
 var includeReg, excludeReg *regexp.Regexp
@@ -175,41 +178,41 @@ func (q *FileManager) QuarkGetShareAndDownload(pdirFid, crtPath string, shareNo 
 		if len(responseData.Data.List) == 0 {
 			break
 		}
-
-		// 输出文件/文件夹列表
 		for _, file := range responseData.Data.List {
-			// 格式化文件/文件夹信息
+			savePath := path.Join(config.Cfg.LocalSaveDir, crtPath, file.FileName)
+
+			// 如果是文件夹，递归获取子文件夹
 			if file.Dir {
-				p = path.Join(crtPath, file.FileName)
+				p := path.Join(crtPath, file.FileName)
 				if err := q.QuarkGetShareAndDownload(file.Fid, p, shareNo); err != nil {
 					log.Printf("获取子文件夹失败: %s\n", err)
 				}
-			} else if file.Size > 100*1024*1024 {
-				fmt.Printf("文件大小超出限制，无法下载")
-			} else {
-				if (nil == includeReg || (includeReg.MatchString(file.FileName))) &&
-					(nil == excludeReg || (!excludeReg.MatchString(file.FileName))) {
-					savePath := path.Join(config.Cfg.LocalSaveDir, crtPath, file.FileName)
-					if ok, _ := util.PathExists(savePath); !ok {
-						crtSize += file.Size
-						fidList = append(fidList, file.Fid)
-						fidTokenList = append(fidTokenList, file.ShareFidToken)
-						if float32(crtSize)/float32(q.Quark.FreeCapacity) > 0.9 {
-							err = q.QuarkSaveShareFiles(fidList, fidTokenList, pdirFid, q.Quark.SaveDir.PdirID, shareNo)
-							if err != nil {
-								continue
-							}
-							err = q.QuarkDownloadAndClear(q.Quark.SaveDir.PdirID, p)
-							if err != nil {
-								continue
-							}
-							crtSize = 0
-							fidList = make([]string, 0)
-							fidTokenList = make([]string, 0)
-						}
-					} else {
-						fmt.Printf("目标文件已存在：%s", savePath)
+				continue
+			}
+
+			// 文件大小超过限制，跳过
+			if file.Size > 100*1024*1024 {
+				fmt.Printf("文件大小超出限制，无法下载：%s\n", file.FileName)
+				continue
+			}
+
+			// 检查文件是否需要下载
+			if shouldDownloadFile(file, savePath, includeReg, excludeReg) {
+				crtSize += file.Size
+				fidList = append(fidList, file.Fid)
+				fidTokenList = append(fidTokenList, file.ShareFidToken)
+
+				// 检查当前容量并处理下载
+				if float32(crtSize)/float32(q.Quark.FreeCapacity) > 0.9 {
+					err = saveAndDownloadFiles(q, fidList, fidTokenList, shareNo, pdirFid, crtPath)
+					if err != nil {
+						log.Printf("保存或下载文件失败：%v\n", err)
+						continue
 					}
+					// 清空列表和计数器
+					crtSize = 0
+					fidList = make([]string, 0)
+					fidTokenList = make([]string, 0)
 				}
 			}
 		}
@@ -228,4 +231,37 @@ func (q *FileManager) QuarkGetShareAndDownload(pdirFid, crtPath string, shareNo 
 		}
 	}
 	return nil
+}
+
+// 判断文件是否需要下载
+func shouldDownloadFile(file FileInfo, savePath string, includeReg, excludeReg *regexp.Regexp) bool {
+	// 过滤文件名，匹配 include 和 exclude 正则
+	if (includeReg != nil && !includeReg.MatchString(file.FileName)) ||
+		(excludeReg != nil && excludeReg.MatchString(file.FileName)) {
+		return false
+	}
+
+	// 检查文件是否已存在，且文件大小是否一致
+	if ok, size, _ := util.PathExists(savePath); ok {
+		if int(size) == file.Size {
+			fmt.Printf("目标文件已存在且大小相同，跳过下载：%s\n", savePath)
+			return false
+		}
+		fmt.Printf("文件大小不一样：删除原有文件重新下载 %s\n", savePath)
+		if err := os.Remove(savePath); err != nil {
+			fmt.Printf("删除文件失败：%s，错误：%v\n", savePath, err)
+			return false
+		}
+	}
+	return true
+}
+
+// 保存和下载文件的逻辑
+func saveAndDownloadFiles(q *FileManager, fidList, fidTokenList []string, shareNo int, pdirFid, crtPath string) error {
+	p := path.Join(config.Cfg.LocalSaveDir, crtPath)
+	err := q.QuarkSaveShareFiles(fidList, fidTokenList, pdirFid, q.Quark.SaveDir.PdirID, shareNo)
+	if err != nil {
+		return err
+	}
+	return q.QuarkDownloadAndClear(q.Quark.SaveDir.PdirID, p)
 }
