@@ -1,6 +1,6 @@
 quark:
   useDirName: "临时存储文件"
-  cookie: "b-user-id=257451cf-4b28-3d02-6330-d6f4a424bad9; _UP_A4A_11_=wb96a19fbaaa48f1985f73cc42068133; _UP_D_=pc; __kps=AATv3HaD3AL4tr38jcVigUDB; __ktd=Now14efqEIZmhH45IyeobQ==; __uid=AATv3HaD3AL4tr38jcVigUDB; __pus=f93db727146462edbf8e4c8a0b05e26bAAT7U705+CDW/JFDvb21QehmzBwzMhzuHzHes4kkAKdFtRO3IIkTJjMTvsHpNpcmxhEO1Cf/6SVsSay1do80vTVk; __kp=6d09a100-8d37-11ef-917b-2379abd6bb71; __puus=6b9926f996e88763246398f1d2ad1db3AARl2RXU31zfVWOeQRpiVS5HhLXWJPY9ElyuqxTSs0R8HyTNESF51IBYoUs7hGyXdAGGylEOY0TkNnuAfLBUOOvsHfraRkrpromm039vxEWe/2l0zRzCuaDEfR5s6y0/SMh6n7k+hFVSIrq9tpfsU2fuCx6jaiWi/ffg+c+ieU1OHLpP+kxzOrG/fYlGOT0fTkaTDVnoLnkguHp7rcv/X74N; isg=BP__masppCOQlKAmYKQQVNzejtOJ5FOGKWb-t5HN6K71oBoimbdE1sLy5nBe-Cv-; tfstk=gXGK5JNy_hxHeJQNag9gEjEdQkYGvb3E7DufZuqhFcntz0euFJ43w8iQjX2uOkmOfyz2z_Z5OGO_-mGnOWikwug4b6mkL8f-X0adV6wW48e_kzklFu9y1PNEsvfuxHP-PmVJmnADi2uU_7tDmytBiKNbJ66CqJO_17W3USvyi2uF5wIWoAOc26fG50ZSVJN15zZ1Ou1IV5g_8l1QP6a5fFUzf7aQN_Z_5rUfNMwIVVTTzlZWy2RzfMZ5wYS7UscFVnCVgfULpuCuX_Uo_s2_c2ZONnGTJgrjRlC5Nk4ARVgt-HCqSWkoDrmH16nxRxiShV-RMkMmu8hTBM6QkWELhXwFJ_NUFAhTtXtP3V0TA-FiId-3EWnK3oyBQho-WkmS9RspjuDmSXwtchft48HIvPNf4bcmMs_CmoUldFLOUTyQ723Qh9QjSLBYWoYp4TWzIhzTmFihFTs-_PEDJ3WPURxN."
+  cookie: ""
 sharesLinks:
   - link:
       url: "https://pan.quark.cn/s/787b447799dc"
@@ -9,5 +9,5 @@ localSaveDir: "music"
 delay: 0.5
 downloadFilter:
   include: ""
-  exclude: ".jpg"
-proxy: "http://192.168.99.203:7890"
+  exclude: ".jpg|.JPG"
+proxy: ""

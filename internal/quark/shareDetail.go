@@ -184,6 +184,8 @@ func (q *FileManager) QuarkGetShareAndDownload(pdirFid, crtPath string, shareNo 
 				if err := q.QuarkGetShareAndDownload(file.Fid, p, shareNo); err != nil {
 					log.Printf("获取子文件夹失败: %s\n", err)
 				}
+			} else if file.Size > 100*1024*1024 {
+				fmt.Printf("文件大小超出限制，无法下载")
 			} else {
 				if (nil == includeReg || (includeReg.MatchString(file.FileName))) &&
 					(nil == excludeReg || (!excludeReg.MatchString(file.FileName))) {
