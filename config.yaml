@@ -1,12 +1,13 @@
 quark:
   useDirName: "临时存储文件"
-  cookie: "_UP_A4A_11_=wb96a15b0acd40fea35af51faee2e0a5; _UP_D_=pc; __pus=a189606278e8db152ea16d0e9a65c916AASD8q9FFpq5Wey6W8nTzmx99tqOSV1PrBQShyFpJRXrMET4SGDF4P4c1TUyy054jQRu0+z6F/IvPb0WXqfxddiT; __kp=5661f960-8d56-11ef-b22c-3db117b6f452; __kps=AATv3HaD3AL4tr38jcVigUDB; __ktd=Now14efqEIZmhH45IyeobQ==; __uid=AATv3HaD3AL4tr38jcVigUDB; b-user-id=3d6862e2-ab65-c4cc-1068-07dd3f186d09; xlly_s=1; __puus=454134c86d8c352f7537aad2ff9ff186AARl2RXU31zfVWOeQRpiVS5HM9K52ZEwZ/wsmByffLE1YUB2sU2vCfhilDEadC/Z2T0g91n6nOadzSGOFkM+8sEcTBGObqwW405VAhfW6CPrVJso0LgEil60sShOXsKIDsW5/l5kl1h7V+l7TvaH+crz2Kq4jWM/S0jL5w44IGxiPDKxX4AkGllqhD3ho9uYqBVnHt2QnQcfPoedmUjJORND; tfstk=gINE5rM0abq1ep5j5VhruikBM5hKAXjfq7iSrz4oRDmnN9ezQzaVJ4ZQr0yrjznHxQAnUV0xkHYHKgnrbcqgRBiSt0YzVzwIxMpHSc0zma3orDvyIqEW-QVzyQuuruQKVwB_Jyh-ZisfcsaLJ-1tDPPeKF0gWqtkqs9YBWrrZisf1dTipMGuA4r4TFziX4uHqYqojV0rj4vnZumiIq0XxbcuqNkil4xnq0AojA0rj0coZu4ipAN0whuSKZ93Iv2VrEkZmymwZIYxJvA35L9kE5uUik4nb2gQ_2kEmA3T9EF4oyVxz7QDU0yUKkgT4sSZi-EaaxcPaChQuRqEQJSy_Aegk7DaBiJYkz4YEAPyxwZ0rkFZ9jWDLoqUu8lLAa9-78zuMXhP3e3_TPVxUWIesDrTS-GLiGdzmPab9AFP0hm8dqhiz7QDU0kl4q--SzhzwJ-kUv0t7m_N7uMLnqXdK6a2eLHdJVof-vvJev0t7m_N7Lp-pw3ZcwDh.; isg=BFBQJjgJA8GK6t_Fca1-fPOdIZiiGTRjx0XEbEoicKt-heAv8Crc8Rb3WE1lfew7"
+  cookie: ""
 sharesLinks:
   - link:
       url: "https://pan.quark.cn/s/787b447799dc"
       passCode: ""
-localSaveDir: "download"
+localSaveDir: "ddd"
 delay: 0.5
 downloadFilter:
   include: ""
   exclude: ".jpg"
+proxy: ""

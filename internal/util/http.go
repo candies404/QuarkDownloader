@@ -10,10 +10,38 @@ import (
 	"time"
 )
 
-var delay int
+var (
+	delay int
+	proxy string
+)
 
 func init() {
 	delay = int(config.Cfg.Delay * 1000)
+	proxy = config.Cfg.Proxy
+}
+
+// GetHTTPClient 根据代理配置生成 http.Client
+func GetHTTPClient() (*http.Client, error) {
+	// 创建默认的 Transport
+	transport := &http.Transport{}
+
+	// 如果 proxy 不为空，则设置代理
+	if proxy != "" {
+		proxyURL, err := url.Parse(proxy)
+		if err != nil {
+			return nil, err
+		}
+		// 设置代理
+		transport.Proxy = http.ProxyURL(proxyURL)
+	}
+
+	// 返回配置好的 http.Client
+	client := &http.Client{
+		Timeout:   60 * time.Second, // 设置超时
+		Transport: transport,
+	}
+
+	return client, nil
 }
 
 // SendRequest 发送HTTP请求的通用方法
@@ -22,7 +50,10 @@ func SendRequest(method, reqURL string, params map[string]string, data interface
 	time.Sleep(time.Duration(rand.Intn(delay)) * time.Millisecond)
 
 	// 创建一个HTTP客户端，设置超时
-	client := &http.Client{Timeout: 60 * time.Second}
+	client, err := GetHTTPClient()
+	if err != nil {
+		return nil, err
+	}
 
 	// 如果有URL参数，进行拼接并进行URL编码（仅对值进行编码）
 	if len(params) > 0 {
@@ -39,7 +70,6 @@ func SendRequest(method, reqURL string, params map[string]string, data interface
 	var req *http.Request
 
 	// 根据请求方法（POST/GET）构建请求
-	var err error
 	if method == http.MethodPost {
 		// 将请求体序列化为JSON
 		jsonData, err := json.Marshal(data)

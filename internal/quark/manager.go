@@ -46,8 +46,8 @@ func NewQuarkFileManager() *FileManager {
 			"origin":          "https://pan.quark.cn",
 			"referer":         "https://pan.quark.cn/",
 			"accept-language": "zh-CN,zh;q=0.9",
-			"cookie":          "__itrace_wid=af3beb62-6606-4b07-34e6-cb2e120e8e62; b-user-id=257451cf-4b28-3d02-6330-d6f4a424bad9; _UP_A4A_11_=wb96a19fbaaa48f1985f73cc42068133; _UP_D_=pc; __pus=f9ac057c711a562a8372fd54dd7dc5bdAAT7U705+CDW/JFDvb21QehmzBwzMhzuHzHes4kkAKdFtRO3IIkTJjMTvsHpNpcmxhGmYBY1l8QocHtR7QVEPoEG; __kp=e7f70ce0-8ac6-11ef-8548-b9999184522d; __kps=AATv3HaD3AL4tr38jcVigUDB; __ktd=Now14efqEIZmhH45IyeobQ==; __uid=AATv3HaD3AL4tr38jcVigUDB; omelette-vid=289772429351748962941705; omelette-vid.sig=wguHlB6BSsRH5VPPL0v9xqDKFc1Pi5q1Z1w7wsq9yoc; __puus=4fe6bbdf1fb638dc2e7296590e38a9a1AARl2RXU31zfVWOeQRpiVS5HZI0qrnwQRNJOudNoLaw3ZdK/mVm57sbn+Dm8DyclfKyUJFb5bYUcYZ/OxmkxpG8CQwoywlqcBwnnc82SAIr+GiJy8/woNuDcwUZNWF44InRfoj/1aUC/ayDsQGKBrKnf60MNPM20ssPcOdZmbMD+bbqC9SvIPwxRL6J4wRBYPygJ+ghUS1mrHU5lZU3kF+Gh; tfstk=gMar0jZpDaQz_qbsGj3E_G8lDL3-A4X1KyMItWVnNYDoRgEU0WNNwXw7tvrEnWHkEeYoYjct6LAkq9HE3x20NUMIrvAUdWZSETKkixcUI6hntYxemfeBZe4U9el3tJC-d_Ibw73K-O6_LNN8w5lpXC6j-6VmJ3iK5MQ_w7dDapf_mN9EPQtgEv2nqqAmTxck-b2HmmDx9XvotUf4ixHDrLDo-IAm6fpHqJ0hgSDxtE7_Vktqs0f6C0MEC1hj4AVo3FPYubDp27D2SF4400kMRx8H-rlzGYjz_FSIIlHSfXeclUuUiXyZ_8JcGxq4iznsqC8aQ4yEjzm2tFNi-o3qiPfBXxaqFJ4rm1TZAq4sj4qfDTiIzfy3y8Re-RVb1znY8OJmpuGtobyhStSy1phDlXzL4pxEqjhqCs5VX65eOm1-sntpvmDZgA1-eHKK4L8B4PcMvHnmQjk1wYC..; isg=BMbGvKLy3cD1D4k5AQd5080tF7xIJwrhmDWXiLDvienEs2bNGLU88f5Bj-9_GwL5",
-			"user-agent":      config.Cfg.Quark.Cookie,
+			"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36",
+			"cookie":          config.Cfg.Quark.Cookie,
 		},
 		Shares: []*Share{},
 		Quark: Quark{

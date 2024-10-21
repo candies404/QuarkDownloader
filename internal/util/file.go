@@ -3,10 +3,9 @@ package util
 import (
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"os"
-	"path/filepath"
-	"time"
 )
 
 // DownloadFile 下载文件并显示进度
@@ -19,7 +18,10 @@ func DownloadFile(downloadURL, savePath string, headers map[string]string) error
 		return fmt.Errorf("检查文件 %s 是否存在时出错: %v", savePath, err)
 	}
 
-	client := &http.Client{Timeout: 60 * time.Second}
+	client, err := GetHTTPClient()
+	if err != nil {
+		return err
+	}
 
 	req, err := http.NewRequest("GET", downloadURL, nil)
 	if err != nil {
@@ -35,6 +37,14 @@ func DownloadFile(downloadURL, savePath string, headers map[string]string) error
 		return err
 	}
 	defer resp.Body.Close()
+
+	// 解析响应数据
+	if resp.StatusCode != 200 {
+		if resp.StatusCode == 403 {
+			log.Fatal("token似乎失效了，请重新登录")
+		}
+		return fmt.Errorf("下载文件失败：%s", resp.Status)
+	}
 
 	//totalSize, _ := strconv.Atoi(resp.Header.Get("content-length"))
 	out, err := os.Create(savePath)
@@ -67,10 +77,10 @@ func DownloadFile(downloadURL, savePath string, headers map[string]string) error
 
 // PrepareDownloadFolder 创建保存文件夹
 func PrepareDownloadFolder(folder string) string {
-	saveFolder := "downloads"
-	if folder != "" {
-		saveFolder = filepath.Join("downloads", folder)
+	err := os.MkdirAll(folder, os.ModePerm)
+	if err != nil {
+		fmt.Printf("创建文件连接失败：%v", err)
+		return ""
 	}
-	os.MkdirAll(saveFolder, os.ModePerm)
-	return saveFolder
+	return folder
 }

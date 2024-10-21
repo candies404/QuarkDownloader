@@ -25,6 +25,7 @@ type Config struct {
 		Include string `yaml:"include"`
 		Exclude string `yaml:"exclude"`
 	} `yaml:"downloadFilter"`
+	Proxy string `yaml:"proxy"`
 }
 
 var Cfg Config // 全局变量保存配置
@@ -55,6 +56,9 @@ func parseConfig(filePath string) error {
 	}
 	if Cfg.Delay == 0 {
 		Cfg.Delay = 1
+	}
+	if Cfg.LocalSaveDir == "" {
+		Cfg.LocalSaveDir = "downloads"
 	}
 	// 解析成功，返回 nil 错误
 	return nil

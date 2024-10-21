@@ -1,12 +1,13 @@
 package quark
 
 import (
+	"QuarkDownloader/config"
 	"QuarkDownloader/internal/util"
 	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
-	"os"
+	"path"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -182,11 +183,7 @@ func (q *FileManager) QuarkDownloadAndClear(pdirFid string, currentPath string) 
 				// 初始化子节点切片
 				currentNode.Children = []*DirectoryNode{}
 
-				crtPath := filepath.Join(currentPath, file.FileName)
-				err := os.MkdirAll(crtPath, os.ModePerm)
-				if err != nil {
-					log.Printf("创建文件夹失败: %s\n", err)
-				}
+				crtPath = filepath.Join(currentPath, file.FileName)
 
 				err = q.QuarkDownloadAndClear(file.Fid, crtPath)
 				if err != nil {
@@ -196,12 +193,12 @@ func (q *FileManager) QuarkDownloadAndClear(pdirFid string, currentPath string) 
 				// 文件下载使用多线程，增加 WaitGroup 和 Semaphore 控制并发
 				wg.Add(1)
 				sem <- struct{}{} // 占用一个并发槽位
-				go func(fileFid, path string) {
+				go func(fileFid, p string) {
 					defer wg.Done()
 					defer func() { <-sem }() // 释放并发槽位
 
 					// 下载文件
-					q.FileDownload([]string{fileFid}, path)
+					q.FileDownload([]string{fileFid}, path.Join(config.Cfg.LocalSaveDir, p))
 				}(file.Fid, crtPath)
 			}
 		}
