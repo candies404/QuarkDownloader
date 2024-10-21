@@ -17,7 +17,7 @@
 
 ## 配置说明
 
-配置文件使用 YAML 格式，结构如下：
+配置文件`config.yaml`结构如下：
 
 ```yaml
 quark:
@@ -34,6 +34,7 @@ delay: 0.5                      # 每个文件下载之间的延迟时间（秒�
 downloadFilter:
     include: ""                   # 包含的文件类型过滤正则表达式
     exclude: ".jpg"               # 排除的文件类型过滤正则表达式
+proxy: ""                       # 全局代理配置
 ```
 
 ## 使用方法
