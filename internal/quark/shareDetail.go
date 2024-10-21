@@ -187,22 +187,26 @@ func (q *FileManager) QuarkGetShareAndDownload(pdirFid, crtPath string, shareNo 
 			} else {
 				if (nil == includeReg || (includeReg.MatchString(file.FileName))) &&
 					(nil == excludeReg || (!excludeReg.MatchString(file.FileName))) {
-
-					crtSize += file.Size
-					fidList = append(fidList, file.Fid)
-					fidTokenList = append(fidTokenList, file.ShareFidToken)
-					if float32(crtSize)/float32(q.Quark.FreeCapacity) > 0.9 {
-						err = q.QuarkSaveShareFiles(fidList, fidTokenList, pdirFid, q.Quark.SaveDir.PdirID, shareNo)
-						if err != nil {
-							continue
+					savePath := path.Join(config.Cfg.LocalSaveDir, crtPath, file.FileName)
+					if ok, _ := util.PathExists(savePath); !ok {
+						crtSize += file.Size
+						fidList = append(fidList, file.Fid)
+						fidTokenList = append(fidTokenList, file.ShareFidToken)
+						if float32(crtSize)/float32(q.Quark.FreeCapacity) > 0.9 {
+							err = q.QuarkSaveShareFiles(fidList, fidTokenList, pdirFid, q.Quark.SaveDir.PdirID, shareNo)
+							if err != nil {
+								continue
+							}
+							err = q.QuarkDownloadAndClear(q.Quark.SaveDir.PdirID, p)
+							if err != nil {
+								continue
+							}
+							crtSize = 0
+							fidList = make([]string, 0)
+							fidTokenList = make([]string, 0)
 						}
-						err = q.QuarkDownloadAndClear(q.Quark.SaveDir.PdirID, p)
-						if err != nil {
-							continue
-						}
-						crtSize = 0
-						fidList = make([]string, 0)
-						fidTokenList = make([]string, 0)
+					} else {
+						fmt.Printf("目标文件已存在：%s", savePath)
 					}
 				}
 			}
