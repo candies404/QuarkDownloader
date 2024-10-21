@@ -37,7 +37,7 @@ func GetHTTPClient() (*http.Client, error) {
 
 	// 返回配置好的 http.Client
 	client := &http.Client{
-		Timeout:   60 * time.Second, // 设置超时
+		Timeout:   300 * time.Second, // 设置超时
 		Transport: transport,
 	}
 
