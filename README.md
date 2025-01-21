@@ -8,6 +8,8 @@
 ### 尽量使用没有存储资源的网盘，操作不慎可能导致网盘重要文件丢失
 ### 尽量使用没有存储资源的网盘，操作不慎可能导致网盘重要文件丢失
 
+[<img src="https://api.gitsponsors.com/api/badge/img?id=874895549" height="90">](https://api.gitsponsors.com/api/badge/link?p=fz6/r2Ybi1Xr7qbqvFyX1mYyGYIjE1bFtv0spH/mDSxTkvG7LjPQy2AdwL0VKpm23E/wjjcTGaNXyLFyI2QF7svduM4VSHkI06lIKWjGNbk/9j11Acsxo/m3A5417J80nvZO7H/qkOstvJTDZG6eLw==)
+
 ## 前沿
 之前在找音乐资源的时候，发现别人分享的连接 **目录结果复杂**、**文件众多**、**云盘大小的限制**，导致下载过程十分繁琐
 本项目的初衷是获取他人分享的云盘连接
